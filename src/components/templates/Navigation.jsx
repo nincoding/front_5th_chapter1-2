@@ -5,11 +5,9 @@ import { globalStore } from "../../stores";
 
 const getNavItemClass = (path) => {
   const baseUrl = import.meta.env.VITE_BASE_URL ?? "/";
-  const currentPath = window.location.pathname.replace(
-    new RegExp(`^${baseUrl}`),
-    "",
-  );
-  return currentPath === path ? "text-blue-600 font-bold" : "text-gray-600";
+  const currentPath = window.location.pathname;
+  const fullPath = baseUrl === "/" ? path : `${baseUrl}${path}`;
+  return currentPath === fullPath ? "text-blue-600 font-bold" : "text-gray-600";
 };
 
 function Link({ onClick, children, ...props }) {

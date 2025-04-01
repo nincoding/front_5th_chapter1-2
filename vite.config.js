@@ -1,34 +1,29 @@
 import { defineConfig as defineTestConfig, mergeConfig } from "vitest/config";
-import { defineConfig } from "vite";
-import { resolve } from "path";
-export default mergeConfig(
-  defineConfig({
-    esbuild: {
-      jsxFactory: "createVNode",
-    },
-    optimizeDeps: {
-      esbuildOptions: {
-        jsx: "transform",
+import { defineConfig, loadEnv } from "vite";
+
+export default ({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "");
+
+  return mergeConfig(
+    defineConfig({
+      esbuild: {
         jsxFactory: "createVNode",
       },
-    },
-    base:
-      process.env.NODE_ENV === "production" ? "/front_5th_chapter1-2/" : "/",
-  }),
-  defineTestConfig({
-    test: {
-      globals: true,
-      environment: "jsdom",
-      setupFiles: "./src/setupTests.js",
-      exclude: ["**/e2e/**", "**/*.e2e.spec.js", "**/node_modules/**"],
-    },
-    build: {
-      rollupOptions: {
-        input: {
-          main: resolve(__dirname, "index.html"),
-          404: resolve(__dirname, "404.html"),
+      optimizeDeps: {
+        esbuildOptions: {
+          jsx: "transform",
+          jsxFactory: "createVNode",
         },
       },
-    },
-  }),
-);
+      base: env.VITE_BASE_URL ?? "/",
+    }),
+    defineTestConfig({
+      test: {
+        globals: true,
+        environment: "jsdom",
+        setupFiles: "./src/setupTests.js",
+        exclude: ["**/e2e/**", "**/*.e2e.spec.js", "**/node_modules/**"],
+      },
+    }),
+  );
+};

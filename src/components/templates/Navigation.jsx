@@ -4,7 +4,11 @@ import { router } from "../../router";
 import { globalStore } from "../../stores";
 
 const getNavItemClass = (path) => {
-  const currentPath = window.location.pathname;
+  const baseUrl = import.meta.env.VITE_BASE_URL ?? "/";
+  const currentPath = window.location.pathname.replace(
+    new RegExp(`^${baseUrl}`),
+    "",
+  );
   return currentPath === path ? "text-blue-600 font-bold" : "text-gray-600";
 };
 

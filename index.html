@@ -6,28 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>항해플러스 SNS</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script type="text/javascript">
-    (function (l) {
-      if (l.search) {
-        var q = {};
-        l.search.slice(1).split("&").forEach(function (v) {
-          var a = v.split("=");
-          q[a[0]] = a.slice(1).join("=").replace(/~and~/g, "&");
-        });
-        console.log("Parsed Query:", q); // 파싱된 쿼리 출력
-        if (q.p !== undefined) {
-          const newUrl = l.pathname.slice(0, -1) + (q.p || "") + (q.q ? "?" + q.q : "") + l.hash;
-          window.history.replaceState(null, null, newUrl);
-          console.log("Updated URL:", newUrl); // 업데이트된 URL 출력
-        }
-      }
-    })(window.location);
-  </script>
   <script type="module" crossorigin src="/front_5th_chapter1-2/assets/index-CDpF2Bvn.js"></script>
 </head>
 
 <body>
   <div id="root"></div>
 </body>
+<script type="text/javascript">
+  (function (l) {
+    if (l.search) {
+      var q = {};
+      l.search.slice(1).split("&").forEach(function (v) {
+        var a = v.split("=");
+        q[a[0]] = a.slice(1).join("=").replace(/~and~/g, "&");
+      });
+      console.log("Parsed Query:", q); // 파싱된 쿼리 출력
+      if (q.p !== undefined) {
+        const newUrl = l.pathname.slice(0, -1) + (q.p || "") + (q.q ? "?" + q.q : "") + l.hash;
+        window.history.replaceState(null, null, newUrl);
+        console.log("Updated URL:", newUrl); // 업데이트된 URL 출력
+      }
+    }
+  })(window.location);
+</script>
 
 </html>

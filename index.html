@@ -10,22 +10,15 @@
     (function (l) {
       if (l.search) {
         var q = {};
-        l.search
-          .slice(1)
-          .split("&")
-          .forEach(function (v) {
-            var a = v.split("=");
-            q[a[0]] = a.slice(1).join("=").replace(/~and~/g, "&");
-          });
+        l.search.slice(1).split("&").forEach(function (v) {
+          var a = v.split("=");
+          q[a[0]] = a.slice(1).join("=").replace(/~and~/g, "&");
+        });
+        console.log("Parsed Query:", q); // 파싱된 쿼리 출력
         if (q.p !== undefined) {
-          window.history.replaceState(
-            null,
-            null,
-            l.pathname.slice(0, -1) +
-            (q.p || "") +
-            (q.q ? "?" + q.q : "") +
-            l.hash,
-          );
+          const newUrl = l.pathname.slice(0, -1) + (q.p || "") + (q.q ? "?" + q.q : "") + l.hash;
+          window.history.replaceState(null, null, newUrl);
+          console.log("Updated URL:", newUrl); // 업데이트된 URL 출력
         }
       }
     })(window.location);

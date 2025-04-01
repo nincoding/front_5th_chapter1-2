@@ -4,7 +4,21 @@ import { normalizeVNode } from "./normalizeVNode";
 import { updateElement } from "./updateElement";
 
 export function renderElement(vNode, container) {
-  // 최초 렌더링시에는 createElement로 DOM을 생성하고
-  // 이후에는 updateElement로 기존 DOM을 업데이트한다.
-  // 렌더링이 완료되면 container에 이벤트를 등록한다.
+  // vNode를 정규화
+  const normalizedVNode = normalizeVNode(vNode);
+
+  // 기존 DOM이 없으면 새로 생성
+  if (!container.firstChild) {
+    const newElement = createElement(normalizedVNode);
+    container.appendChild(newElement);
+  } else {
+    // 기존 DOM이 있으면 업데이트
+    updateElement(container, normalizedVNode, container.firstChild);
+  }
+
+  // 이벤트 리스너 설정
+  const cleanup = setupEventListeners(container);
+
+  // cleanup 함수를 반환하여 필요 시 이벤트 리스너를 제거할 수 있도록 함
+  return cleanup;
 }

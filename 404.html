@@ -5,27 +5,26 @@
     <meta charset="utf-8" />
     <title>Single Page Apps for GitHub Pages</title>
     <script type="text/javascript">
-        var segmentCount = 1;
+        var pathSegmentsToKeep = 1;
         var l = window.location;
-        l.replace(
+        var pathname = l.pathname;
+        var search = l.search;
+        var hash = l.hash;
+        var pathParts = pathname.split("/");
+        var basePath = pathParts.slice(0, 1 + pathSegmentsToKeep).join("/");
+        var remainingPath = pathParts.slice(1 + pathSegmentsToKeep).join("/");
+        var redirectUrl =
             l.protocol +
             "//" +
             l.hostname +
             (l.port ? ":" + l.port : "") +
-            l.pathname
-                .split("/")
-                .slice(0, 1 + segmentCount)
-                .join("/") +
+            basePath +
             "/?p=/" +
-            l.pathname
-                .slice(1)
-                .split("/")
-                .slice(segmentCount)
-                .join("/")
-                .replace(/&/g, "~and~") +
-            (l.search ? "&q=" + l.search.slice(1).replace(/&/g, "~and~") : "") +
-            l.hash,
-        );
+            remainingPath +
+            (search ? "&q=" + search.slice(1).replace(/&/g, "~and~") : "") +
+            hash;
+
+        l.replace(redirectUrl);
     </script>
 </head>
 

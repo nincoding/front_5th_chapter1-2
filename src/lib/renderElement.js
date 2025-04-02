@@ -3,22 +3,25 @@ import { createElement } from "./createElement";
 import { normalizeVNode } from "./normalizeVNode";
 import { updateElement } from "./updateElement";
 
-export function renderElement(vNode, container) {
-  // vNode를 정규화
-  const normalizedVNode = normalizeVNode(vNode);
+// 이전 노드를 저장하기 위한 맵 : container를 키로 사용하고 해당 컨테이너에 마지막으로 렌더링된 vNode를 값으로 저장
+const oldNodeMap = new WeakMap();
 
-  // 기존 DOM이 없으면 새로 생성
-  if (!container.firstChild) {
-    const newElement = createElement(normalizedVNode);
+export function renderElement(vNode, container) {
+  const oldNode = oldNodeMap.get(container);
+  // vNode를 정규화한 신규 노드
+  const newNode = normalizeVNode(vNode);
+
+  // 기존 DOM(oldNode)이 없으면 신규 엘리먼트를 생성 후 container에 추가
+  if (!oldNode) {
+    const newElement = createElement(newNode);
     container.appendChild(newElement);
   } else {
     // 기존 DOM이 있으면 업데이트
-    updateElement(container, normalizedVNode, container.firstChild);
+    updateElement(container, newNode, oldNode);
   }
 
-  // 이벤트 리스너 설정
-  const cleanup = setupEventListeners(container);
+  oldNodeMap.set(container, newNode);
 
-  // cleanup 함수를 반환하여 필요 시 이벤트 리스너를 제거할 수 있도록 함
-  return cleanup;
+  // 렌더링 완료후 container에 이벤트 리스너 설정
+  setupEventListeners(container);
 }

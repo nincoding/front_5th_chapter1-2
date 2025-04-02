@@ -4,6 +4,7 @@ import { toTimeFormat } from "../../utils/index.js";
 import { globalStore } from "../../stores/globalStore.js";
 
 export const Post = ({
+  id,
   author,
   time,
   content,
@@ -11,14 +12,14 @@ export const Post = ({
   activationLike = false,
 }) => {
   const { loggedIn } = globalStore.getState();
+  const { toggleLike } = globalStore.actions;
 
   const handleLikeClick = () => {
     if (!loggedIn) {
       alert("로그인 후 이용해주세요");
       return;
     }
-    //Todo: 좋아요 클릭 로직 구현
-    console.log("좋아요 클릭됨");
+    toggleLike(id);
   };
 
   return (

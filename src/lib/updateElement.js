@@ -70,7 +70,7 @@ export function updateElement(parentElement, newNode, oldNode, index = 0) {
     return;
   }
 
-  updateAttributes(currentElement, newNode.props, oldNode.props);
+  updateAttributes(currentElement, newNode.props ?? {}, oldNode.props ?? {});
 
   const newChildren = newNode.children || [];
   const oldChildren = oldNode.children || [];

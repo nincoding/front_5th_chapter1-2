@@ -2,11 +2,25 @@ import { addEvent, removeEvent } from "./eventManager";
 import { createElement } from "./createElement.js";
 
 function updateAttributes(target, newProps = {}, oldProps = {}) {
+  // 1. 기존 이벤트 핸들러 제거
+  for (const key in oldProps) {
+    if (typeof oldProps[key] === "function" && key.startsWith("on")) {
+      const eventType = key.toLowerCase().substring(2);
+
+      // 새 Props에 이벤트가 없거나 다른 함수라면 제거
+      if (!(key in newProps) || newProps[key] !== oldProps[key]) {
+        removeEvent(target, eventType, oldProps[key]);
+      }
+    }
+  }
+
+  // 2. 새 속성 추가 및 업데이트
   for (const [key, newValue] of Object.entries(newProps)) {
     if (newValue === oldProps[key]) continue;
 
-    if (typeof newValue === "function") {
-      addEvent(target, key.toLowerCase().substring(2), newValue);
+    if (typeof newValue === "function" && key.startsWith("on")) {
+      const eventType = key.toLowerCase().substring(2);
+      addEvent(target, eventType, newValue);
       continue;
     }
 
@@ -25,13 +39,9 @@ function updateAttributes(target, newProps = {}, oldProps = {}) {
     }
   }
 
+  // 3. 삭제된 속성 정리
   for (const key in oldProps) {
     if (key in newProps) continue;
-
-    if (typeof oldProps[key] === "function") {
-      removeEvent(target, key.toLowerCase().substring(2), oldProps[key]);
-      continue;
-    }
 
     if (key === "className") {
       target.className = "";
